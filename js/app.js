@@ -1,10 +1,23 @@
 window.addEventListener('load', () => {
+    let boardLayout = [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 2, 1, 0, 0, 0],
+        [0, 0, 0, 1, 2, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+    ]
     const colors = [
         '#2196f3',
         '#e91e63',
         '#ffeb3b',
         '#74ff1d'
     ]
+    const board = document.getElementById('board');
+    const prefixes = ['-o-', '-ms-', '-moz-', '-webkit-'];
+    let turn='black';
 
     function createLine() {
         const backgroundSection = document.getElementById('background');
@@ -37,7 +50,96 @@ window.addEventListener('load', () => {
             backgroundLine.remove();
         }, 15000);
     }
+    
+    function createBoard() {
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                
+                cell = document.createElement("div");
+                cell.setAttribute("id", "cell" + i + "-" + j);
+                cell.setAttribute("class", "cell");
+                board.appendChild(cell);
+            }
+            
+        }
+        cells=document.getElementsByClassName('cell');
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].addEventListener('click', () => {
+                if (!cells[i].querySelector(".tile")) {
+                    if (turn == 'black') {
+                        turn='white';
+                        tilexy=cells[i].id.split('cell',2)[1].split('-',2);
+                        boardLayout[parseInt(tilexy[0])][parseInt(tilexy[1])]=2;
+                        updateBoard();
+                        console.log(cells[i].id.split('cell',2)[1].split('-',2));
+                    } else if (turn == 'white'){
+                        turn='black';
+                        tilexy=cells[i].id.split('cell',2)[1].split('-',2);
+                        boardLayout[parseInt(tilexy[0])][parseInt(tilexy[1])]=1;
+                        updateBoard();
+                        console.log(cells[i].id.split('cell',2)[1].split('-',2));
+                    }
+                }
+                //     tile=cells[i].querySelector('.tile');
+                //     if (tile.style.transform == 'rotateY(180deg)') {
+                //         tile.style.transform= 'rotateY(0deg)';
+                //         tile.classList.remove('white');
+                //         tile.classList.add('black');
+                //     }else {
+                //         tile.style.transform= 'rotateY(180deg)';
+                //         tile.classList.remove('black');
+                //         tile.classList.add('white');
+                //     }
+                // }else {
+                //     tile=cells[i].querySelector('.tile');
+                //     if (tile.style.transform == 'rotateY(180deg)') {
+                //         tile.style.transform= 'rotateY(0deg)';
+                //         tile.classList.remove('white');
+                //         tile.classList.add('black');
+                //     }else {
+                //         tile.style.transform= 'rotateY(180deg)';
+                //         tile.classList.remove('black');
+                //         tile.classList.add('white');
+                //     }
+                // }
+
+            });
+        }
+    }
+
+    function createTile(color) {
+        // const tileContainer = document.createElement('div');
+        const tile = document.createElement('div');
+        // tile.innerHTML = '<div class="blackside"><div class="black"></div></div><div class="whiteside"><div class="white"></div></div>'
+        // const blackSide = document.createElement('div');
+        // const whiteSide = document.createElement('div');
+        // const blackColor = document.createElement('div');
+        // const whiteColor = document.createElement('div');
+        tile.classList.add('tile');
+        if (color == 'white') {
+            tile.classList.add('white');
+        } else if (color == 'black'){
+            tile.classList.add('black');
+        }
+        return tile;
+    }
+
+    function updateBoard() {
+        board.innerHTML="";
+        createBoard();
+        for (let row = 0; row < 8; row++) {
+            for (let column = 0; column < 8; column++) {
+                const currentTile = boardLayout[row][column];
+                if (currentTile == 0) {
+                }
+                else {
+                    currentTile == 1 ? document.getElementById('cell' + row + '-' + column).appendChild(createTile('black')) : document.getElementById('cell' + row + '-' + column).appendChild(createTile('white'));
+                }
+            }
+        }
+    }
 
     setInterval(createLine, 750);
+    updateBoard();
 
 })

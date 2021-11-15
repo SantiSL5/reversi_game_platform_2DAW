@@ -1,0 +1,88 @@
+$green: #3CE281;
+// $ligthligthdarkgreen: darken($green, 5%);
+// $lightdarkgreen: darken($green, 10%);
+// $lightdarkdarkgreen: darken($green, 15%);
+$darkgreen: darken($green, 20%);
+
+#board {
+    height: 60vh;
+    width: 60vh;
+    position: absolute;
+    display: grid;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    grid-template-columns: (auto auto auto auto);
+    background-color: transparent;
+    backdrop-filter: blur(2px);
+    overflow: hidden;
+    min-height: 0;  /* NEW */
+    min-width: 0;
+}
+
+.cell {
+    background-clip: padding-box;
+    border: 2px solid rgba(0,0,0,0);
+    background-color: $darkgreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    min-width: 0;      /* NEW; needed for Firefox */
+}
+
+.tile {
+    height: 75%;
+    width: 75%;
+    border-radius: 50%;
+    position: relative;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+// .blackside, .whiteside {
+//     position: absolute;
+//     width: 100%;
+//     height: 100%;
+//     -webkit-backface-visibility: hidden;
+//     backface-visibility: hidden;
+// }
+
+// .blackside {
+//     background-color: transparent;
+//     color: black;
+// }
+
+// .whiteside {
+//     background-color: transparent;
+//     color: white;
+//     transform: rotateY(180deg);
+// }
+
+.black {
+    background-color: transparent;
+    background-color: black;
+    // border: 0.3vh solid black;
+    border-radius: 50%;
+}
+
+.white {
+    background-color: transparent;
+    background-color: white;
+    // border: 0.3vh solid white;
+    border-radius: 50%;
+}
+
+
+@for $i from 0 through 7 {
+    @for $j from 1 through 7 {
+        #cell#{$i}-#{$j} {
+            grid-row: #{$i+1};
+            grid-column: #{$j+1};
+        }
+    }
+}
