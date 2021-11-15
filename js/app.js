@@ -91,7 +91,7 @@ window.addEventListener('load', () => {
                             captureTiles(move);
                             turn='white';
                             updateBoard();
-                            // canmove();
+                            canmove();
                             // console.log(cells[i].id.split('cell',2)[1].split('-',2));
                         } else if (turn == 'white'){
                             boardLayout[row][column]=2;
@@ -99,7 +99,7 @@ window.addEventListener('load', () => {
                             captureTiles(move);
                             turn='black';
                             updateBoard();
-                            // canmove();
+                            canmove();
                             // console.log(cells[i].id.split('cell',2)[1].split('-',2));
                         }
                     }
