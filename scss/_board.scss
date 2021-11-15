@@ -65,18 +65,56 @@ $darkgreen: darken($green, 20%);
 
 .black {
     background-color: transparent;
-    background-color: black;
-    // border: 0.3vh solid black;
+    background-color: #000;
     border-radius: 50%;
 }
 
 .white {
     background-color: transparent;
-    background-color: white;
-    // border: 0.3vh solid white;
+    background-color: #fff;
     border-radius: 50%;
 }
 
+.validMove {
+    background-color: transparent;
+    background-color: #dddddd4d;
+    border-radius: 50%;
+}
+
+.scoreboardContainer {
+    height: 11vh;
+    width: 55vh;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.scoreboard {
+    display: flex;
+    height: 10vh;
+    width: 25vh;
+    position: absolute;
+    border-radius: 2vh;
+    backdrop-filter: blur(4px);
+    background-color: transparent;
+    border: 0.3vh solid $darkgreen;
+    color: #fff;
+    font-size: 3vh;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
+    align-items: center;
+}
+
+#playerScore {
+    left: 0;
+}
+
+#AIScore {
+    right: 0;
+}
 
 @for $i from 0 through 7 {
     @for $j from 1 through 7 {
