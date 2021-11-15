@@ -18,7 +18,7 @@ $darkgreen: darken($green, 20%);
     background-color: transparent;
     backdrop-filter: blur(2px);
     overflow: hidden;
-    min-height: 0;  /* NEW */
+    min-height: 0;
     min-width: 0;
 }
 
@@ -30,7 +30,7 @@ $darkgreen: darken($green, 20%);
     justify-content: center;
     align-items: center;
     padding: 0;
-    min-width: 0;      /* NEW; needed for Firefox */
+    min-width: 0; // Needed for Firefox
 }
 
 .tile {
@@ -114,6 +114,25 @@ $darkgreen: darken($green, 20%);
 
 #AIScore {
     right: 0;
+}
+
+#announcer {
+    display: flex;
+    height: 15vh;
+    width: 35vh;
+    position: absolute;
+    top: 82%;
+    left: 42%;
+    border-radius: 2vh;
+    backdrop-filter: blur(4px);
+    background-color: transparent;
+    border: 0.3vh solid $darkgreen;
+    color: #fff;
+    font-size: 5vh;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
 }
 
 @for $i from 0 through 7 {

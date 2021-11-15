@@ -30,6 +30,7 @@ window.addEventListener('load', () => {
     const board = document.getElementById('board');
     const playerScore = document.getElementById('playerScore');
     const AIScore = document.getElementById('AIScore');
+    const announcer = document.getElementById('announcer');
     const prefixes = ['-o-', '-ms-', '-moz-', '-webkit-'];
     let turn='black';
 
@@ -193,6 +194,33 @@ window.addEventListener('load', () => {
 
     }
 
+    function gameFinish() {
+        let finalPlayerScore = 0;
+        let finalAIScore = 0;
+
+        for (let row = 0; row < 8; row++) {
+            for (let column = 0; column < 8; column++) {
+                let value = boardLayout[row][column];
+                if (value == 1) {
+                    finalPlayerScore++;
+                } else if (value == 2) {
+                    finalAIScore++;
+                }
+            }
+        }
+
+        if (finalPlayerScore > finalAIScore) {
+            announcer.innerHTML = "YOU WIN";
+        } else if (finalPlayerScore > finalAIScore) {
+            announcer.innerHTML = "TIE";
+        } else {
+            announcer.innerHTML = "AI WINS";
+        }
+
+        announcer.style.visibility = "visible";
+
+    }
+
     function resetValidMoves() {
         for (let row = 0; row < 8; row++) {
             for (let column = 0; column < 8; column++) {
@@ -224,6 +252,7 @@ window.addEventListener('load', () => {
                     }
                 }
                 if (move==false) {
+                    console.log('game over');
                     gameFinish();
                 }
             }
@@ -238,6 +267,7 @@ window.addEventListener('load', () => {
                     }
                 }
                 if (move==false) {
+                    console.log('game over');
                     gameFinish();
                 }
             }
