@@ -27,6 +27,8 @@ window.addEventListener('load', () => {
         [-1,1]
     ]
 
+    var tilesCaptured = [];
+
     const board = document.getElementById('board');
     const playerScore = document.getElementById('playerScore');
     const AIScore = document.getElementById('AIScore');
@@ -92,7 +94,6 @@ window.addEventListener('load', () => {
                             turn='white';
                             updateBoard();
                             canmove();
-                            playIA();
                         } 
                         // Multiplayer
                         // else if (turn == 'white'){
@@ -105,41 +106,12 @@ window.addEventListener('load', () => {
                         // }
                     }
                 }
-                //     tile=cells[i].querySelector('.tile');
-                //     if (tile.style.transform == 'rotateY(180deg)') {
-                //         tile.style.transform= 'rotateY(0deg)';
-                //         tile.classList.remove('white');
-                //         tile.classList.add('black');
-                //     }else {
-                //         tile.style.transform= 'rotateY(180deg)';
-                //         tile.classList.remove('black');
-                //         tile.classList.add('white');
-                //     }
-                // }else {
-                //     tile=cells[i].querySelector('.tile');
-                //     if (tile.style.transform == 'rotateY(180deg)') {
-                //         tile.style.transform= 'rotateY(0deg)';
-                //         tile.classList.remove('white');
-                //         tile.classList.add('black');
-                //     }else {
-                //         tile.style.transform= 'rotateY(180deg)';
-                //         tile.classList.remove('black');
-                //         tile.classList.add('white');
-                //     }
-                // }
-
             });
         }
     }
 
     function createTile(color) {
-        // const tileContainer = document.createElement('div');
         const tile = document.createElement('div');
-        // tile.innerHTML = '<div class="blackside"><div class="black"></div></div><div class="whiteside"><div class="white"></div></div>'
-        // const blackSide = document.createElement('div');
-        // const whiteSide = document.createElement('div');
-        // const blackColor = document.createElement('div');
-        // const whiteColor = document.createElement('div');
         tile.classList.add('tile');
         if (color == 'white') {
             tile.classList.add('white');
@@ -189,6 +161,13 @@ window.addEventListener('load', () => {
                 }
             }
         }
+
+        if (tilesCaptured.length != 0) {
+            for (let i = 0; i < tilesCaptured.length; i++) {
+                rotateTile(tilesCaptured[i]);
+            }
+        }
+        tilesCaptured=[];
         
         updateScore();
 
@@ -237,39 +216,45 @@ window.addEventListener('load', () => {
             for (let column = 0; column < 8; column++) {
                 if (boardLayout[row][column] == 3) {
                     move=true;
+                    if (turn=='white') {
+                        playIA();
+                    }
                 }
             }
         }
-        if (move==false) {
-            if (turn=='black') {
-                turn='white';
-                updateBoard();
-                for (let row = 0; row < 8; row++) {
-                    for (let column = 0; column < 8; column++) {
-                        if (boardLayout[row][column] == 3) {
-                            move=true;
+        setTimeout(()=> {
+            if (move==false) {
+                if (turn=='black') {
+                    turn='white';
+                    updateBoard();
+                    for (let row = 0; row < 8; row++) {
+                        for (let column = 0; column < 8; column++) {
+                            if (boardLayout[row][column] == 3) {
+                                move=true;
+                            }
                         }
                     }
-                }
-                if (move==false) {
-                    gameFinish();
-                }
-            }
-            if (turn=='white') {
-                turn='black';
-                updateBoard();
-                for (let row = 0; row < 8; row++) {
-                    for (let column = 0; column < 8; column++) {
-                        if (boardLayout[row][column] == 3) {
-                            move=true;
+                    if (move==false) {
+                        gameFinish();
+                    }else {
+                        playIA();
+                    }
+                }else if (turn=='white') {
+                    turn='black';
+                    updateBoard();
+                    for (let row = 0; row < 8; row++) {
+                        for (let column = 0; column < 8; column++) {
+                            if (boardLayout[row][column] == 3) {
+                                move=true;
+                            }
                         }
                     }
-                }
-                if (move==false) {
-                    gameFinish();
+                    if (move==false) {
+                        gameFinish();
+                    }
                 }
             }
-        }
+        }, 600)
     }
 
     function checkValidMoves() {
@@ -289,7 +274,7 @@ window.addEventListener('load', () => {
         for (let i = 0; i < 8; i++) {
             result=false;
             if (turn=='black') {
-                if ( !(move[0]+directions[i][0] < 0) && !(move[0]+directions[i][0] > 7) && !(move[1]+directions[i][1] < 0) && !(move[0]+directions[i][0] > 7)) {
+                if ( !(move[0]+directions[i][0] < 0) && !(move[0]+directions[i][0] >= 7) && !(move[1]+directions[i][1] < 0) && !(move[0]+directions[i][0] >= 7)) {
                     cellcheck=[move[0]+directions[i][0],move[1]+directions[i][1]];
                     if (boardLayout[cellcheck[0]][cellcheck[1]] == 2) {
                         if (checkDirections(directions[i],cellcheck)) {
@@ -318,7 +303,7 @@ window.addEventListener('load', () => {
         found=false;
         rep=1;
         while (check==false) {
-            if ( !(move[0]+(direction[0]*rep) < 0) && !(move[0]+(direction[0]*rep) > 7) && !(move[1]+(direction[1]*rep) < 0) && !(move[0]+(direction[1]*rep) > 7)) {
+            if ( !(move[0]+(direction[0]*rep) < 0) && !(move[0]+(direction[0]*rep) > 7) && !(move[1]+(direction[1]*rep) < 0) && !(move[0]+(direction[1]*rep) >= 7)) {
                 if (turn=='black') {
                     cellcheck=[move[0]+(direction[0]*rep),move[1]+(direction[1]*rep)];
                     if (boardLayout[cellcheck[0]][cellcheck[1]] == 1) {
@@ -349,10 +334,6 @@ window.addEventListener('load', () => {
                 check=true
             }
             rep++
-            if (rep==8) {
-                found=false;
-                check=true;
-            }
         }
         return found;
     }
@@ -391,6 +372,9 @@ window.addEventListener('load', () => {
                         for (let i = 0; i <= rep; i++) {
                             cellcapture=[move[0]+(direction[0]*i),move[1]+(direction[1]*i)];
                             boardLayout[cellcapture[0]][cellcapture[1]]=1;
+                            if (i != rep) {
+                                tilesCaptured.push(cellcapture);
+                            }
                         }
                         check=true;
                     }else if ((boardLayout[cellcheck[0]][cellcheck[1]] == 0)){
@@ -408,6 +392,9 @@ window.addEventListener('load', () => {
                         for (let i = 0; i <= rep; i++) {
                             cellcapture=[move[0]+(direction[0]*i),move[1]+(direction[1]*i)];
                             boardLayout[cellcapture[0]][cellcapture[1]]=2;
+                            if (i != rep) {
+                                tilesCaptured.push(cellcapture);
+                            }
                         }
                         check=true;
                     }else if ((boardLayout[cellcheck[0]][cellcheck[1]] == 0)){
@@ -453,6 +440,30 @@ window.addEventListener('load', () => {
         }, 1500)
     }
 
+    function rotateTile(tile) {
+        if (document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.contains('black')) {
+            document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.remove('black');
+            document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.add('white');
+        } else {
+            document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.remove('white');
+            document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.add('black');
+        }
+        setTimeout(()=> {
+            document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].style.transform= 'rotateY(180deg)';
+        }, 20)
+
+        setTimeout(()=> {
+            if (document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.contains('black')) {
+                document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.remove('black');
+                document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.add('white');
+            } else {
+                document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.remove('white');
+                document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.add('black');
+            }
+        }, 207)
+    }
+
     setInterval(createLine, 750);
     updateBoard();
+
 });
