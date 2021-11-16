@@ -31,6 +31,9 @@ window.addEventListener('load', () => {
     const playerScore = document.getElementById('playerScore');
     const AIScore = document.getElementById('AIScore');
     const announcer = document.getElementById('announcer');
+    const helpIcon = document.getElementById('helpIcon');
+    const rules = document.getElementById('rules');
+    const gotIt = document.getElementById('gotIt');
     const prefixes = ['-o-', '-ms-', '-moz-', '-webkit-'];
     let turn='black';
 
@@ -65,6 +68,33 @@ window.addEventListener('load', () => {
             backgroundLine.remove();
         }, 15000);
     }
+
+    helpIcon.addEventListener('click', () => {
+        if (rules.classList.contains('showRules')) {
+            rules.classList.remove('showRules');
+            rules.classList.add('hideRules');
+            gotIt.classList.add('hidden');
+            setTimeout(() => {
+                rules.classList.add('hidden');
+            }, 1300);
+        } else {
+            rules.classList.remove('hidden');
+            rules.classList.remove('hideRules');
+            rules.classList.add('showRules');
+            setTimeout(() => {
+                gotIt.classList.remove('hidden');
+            }, 1300);
+        }
+    });
+
+    gotIt.addEventListener('click', () => {
+        rules.classList.remove('showRules');
+        rules.classList.add('hideRules');
+        gotIt.classList.add('hidden');
+        setTimeout(() => {
+            rules.classList.add('hidden');
+        }, 1300);
+    });
     
     function createBoard() {
         for (let i = 0; i < 8; i++) {
@@ -92,39 +122,19 @@ window.addEventListener('load', () => {
                             turn='white';
                             updateBoard();
                             canmove();
-                        } else if (turn == 'white'){
+                            playIA();
+                        } 
+                        /* Multiplayer
+                        else if (turn == 'white'){
                             boardLayout[row][column]=2;
                             move=[row,column];
                             captureTiles(move);
                             turn='black';
                             updateBoard();
                             canmove();
-                        }
+                        } */
                     }
                 }
-                //     tile=cells[i].querySelector('.tile');
-                //     if (tile.style.transform == 'rotateY(180deg)') {
-                //         tile.style.transform= 'rotateY(0deg)';
-                //         tile.classList.remove('white');
-                //         tile.classList.add('black');
-                //     }else {
-                //         tile.style.transform= 'rotateY(180deg)';
-                //         tile.classList.remove('black');
-                //         tile.classList.add('white');
-                //     }
-                // }else {
-                //     tile=cells[i].querySelector('.tile');
-                //     if (tile.style.transform == 'rotateY(180deg)') {
-                //         tile.style.transform= 'rotateY(0deg)';
-                //         tile.classList.remove('white');
-                //         tile.classList.add('black');
-                //     }else {
-                //         tile.style.transform= 'rotateY(180deg)';
-                //         tile.classList.remove('black');
-                //         tile.classList.add('white');
-                //     }
-                // }
-
             });
         }
     }
@@ -176,7 +186,7 @@ window.addEventListener('load', () => {
         for (let row = 0; row < 8; row++) {
             for (let column = 0; column < 8; column++) {
                 const currentTile = boardLayout[row][column];
-                if (currentTile == 3) {
+                if (currentTile == 3 && turn == 'black') {
                     document.getElementById('cell' + row + '-' + column).appendChild(createTile('validMove'));
                 }else if (currentTile == 1){
                     document.getElementById('cell' + row + '-' + column).appendChild(createTile('black'));
@@ -194,6 +204,7 @@ window.addEventListener('load', () => {
     function gameFinish() {
         let finalPlayerScore = 0;
         let finalAIScore = 0;
+        let scoreToSend = 0;
 
         for (let row = 0; row < 8; row++) {
             for (let column = 0; column < 8; column++) {
@@ -208,13 +219,16 @@ window.addEventListener('load', () => {
 
         if (finalPlayerScore > finalAIScore) {
             announcer.innerHTML = "YOU WIN";
+            scoreToSend = finalPlayerScore*10;
         } else if (finalPlayerScore > finalAIScore) {
             announcer.innerHTML = "TIE";
         } else {
             announcer.innerHTML = "AI WINS";
+            scoreToSend = -(finalAIScore*10);
         }
 
         announcer.style.visibility = "visible";
+        send_score(scoreToSend);
 
     }
 
@@ -251,8 +265,7 @@ window.addEventListener('load', () => {
                 if (move==false) {
                     gameFinish();
                 }
-            }
-            if (turn=='white') {
+            } else if (turn=='white') {
                 turn='black';
                 updateBoard();
                 for (let row = 0; row < 8; row++) {
@@ -425,6 +438,54 @@ window.addEventListener('load', () => {
 
     function captureTiles(move) {
         checkMove(move);
+    }
+
+    function playIA() {
+        posibleplays=[];
+        boardLayout.map((lines,index) => {
+            lines.map((cell,childindex) => {
+                if (cell == 3) {
+                    posibleplays[posibleplays.length]=[index,childindex];
+                }
+            })
+        })
+        indexplay=Math.floor(Math.random() * ((posibleplays.length -1) - 0 + 1) + 0);
+        play=posibleplays[indexplay];
+        row=play[0]
+        column=play[1];
+        boardLayout[row][column]=2;
+        move=[row,column];
+        setTimeout(()=> {
+            captureTiles(move);
+            turn='black';
+            updateBoard();
+            canmove();
+        }, 1500)
+    }
+
+    function send_score(variableScore) {
+        var token = localStorage.getItem("token");
+        console.log(variableScore);
+        if (token) {
+            var http = new XMLHttpRequest();
+            var url = 'http://0.0.0.0:4000/api/rank/update';
+            var params = JSON.stringify({
+                nameGame: "Reversi",
+                score: variableScore
+            });
+            http.open('POST', url, true);
+    
+            //Send the proper header information along with the request
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            http.setRequestHeader('Authorization', 'Token ' + token);
+    
+            http.onreadystatechange = function() { //Call a function when the state changes.
+                if (http.readyState == 4 && http.status == 200) {
+                    console.log(http.responseText);
+                }
+            }
+            http.send(params);
+        }
     }
 
     setInterval(createLine, 750);

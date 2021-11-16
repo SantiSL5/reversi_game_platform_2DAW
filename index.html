@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reversi</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="js/app.js"></script>
 </head>
 <body>
@@ -17,6 +18,17 @@
         </section>
         <section id="board"></section>
         <section id="announcer"></section>
+        <section class="help">
+            <i class="far fa-question-circle" id="helpIcon"></i>
+        </section>
+        <section class="hidden" id="rules">
+            <p class="rulesTitle">Reversi</p>
+            <br/>
+            <p>Reversi is a 1v1 board game where you and your rival put a tile each turn. The goal is to have more tiles than your opponent at the end of the game.</p>
+            <p>You can only put your tiles where you can capture at least one of your enemy's. You capture a tile by "sandwiching" rival tiles with yours. You will capture all the tiles in all possible directions: horizontally, vertically and diagonally.</p>
+            <p>If you're not able to put a tile, your turn will be automatically passed. If no one can put a tile, the game will end and the result will be decided by the current tiles placed on the board.</p>
+            <div class="hidden" id="gotIt">GOT IT</div>
+        </section>
     </main>
 </body>
 </html>

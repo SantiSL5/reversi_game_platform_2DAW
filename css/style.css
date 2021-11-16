@@ -122,22 +122,41 @@ main {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
+/* .blackside, .whiteside {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.blackside {
+    background-color: transparent;
+    color: black;
+}
+
+.whiteside {
+    background-color: transparent;
+    color: white;
+    transform: rotateY(180deg);
+} */
 .black {
-  background-color: transparent;
   background-color: #000;
   border-radius: 50%;
 }
 
 .white {
-  background-color: transparent;
   background-color: #fff;
   border-radius: 50%;
 }
 
 .validMove {
-  background-color: transparent;
   background-color: #dddddd4d;
   border-radius: 50%;
+}
+
+.validMove:hover {
+  background-color: #eeeeeebb;
 }
 
 .scoreboardContainer {
@@ -180,8 +199,11 @@ main {
   height: 15vh;
   width: 35vh;
   position: absolute;
-  top: 82%;
-  left: 42%;
+  top: 90%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   border-radius: 2vh;
   backdrop-filter: blur(4px);
   background-color: transparent;
@@ -192,6 +214,81 @@ main {
   justify-content: center;
   align-items: center;
   visibility: hidden;
+}
+
+.help {
+  display: flex;
+  overflow: visible;
+  position: absolute;
+  top: 5%;
+  right: 1%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.help i {
+  color: #fff;
+  font-size: 5vh;
+  overflow: visible;
+}
+.help i:hover {
+  cursor: pointer;
+  text-shadow: 0.1vh 0.1vh 0.2vh #fff;
+}
+
+#rules {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: #000d;
+  backdrop-filter: blur(5px);
+}
+#rules p {
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2.5vh;
+  padding: 2vh 5vh;
+}
+#rules .rulesTitle {
+  padding-top: 2vh;
+  font-size: 5vh;
+  text-align: center;
+}
+#rules #gotIt {
+  display: flex;
+  height: 5vh;
+  width: 15vh;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  border-radius: 2vh;
+  border: 0.3vh solid #18a051;
+  color: #fff;
+  font-size: 3vh;
+  font-family: Arial, Helvetica, sans-serif;
+  justify-content: center;
+  align-items: center;
+}
+#rules #gotIt:hover {
+  border: 0.4vh solid #fff;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.hideRules {
+  animation: hideRulesAnimation 1.3s ease-in forwards;
+}
+
+.showRules {
+  animation: showRulesAnimation 1.3s ease-out forwards;
 }
 
 #cell0-1 {
@@ -472,6 +569,27 @@ main {
 #cell7-7 {
   grid-row: 8;
   grid-column: 8;
+}
+
+@keyframes showRulesAnimation {
+  0% {
+    height: 0vh;
+    width: 100%;
+  }
+  100% {
+    height: 45vh;
+    width: 100%;
+  }
+}
+@keyframes hideRulesAnimation {
+  0% {
+    height: 45vh;
+    width: 100%;
+  }
+  100% {
+    height: 0vh;
+    width: 100%;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
