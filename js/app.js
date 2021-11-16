@@ -91,16 +91,14 @@ window.addEventListener('load', () => {
                             captureTiles(move);
                             turn='white';
                             updateBoard();
-                            // canmove();
-                            // console.log(cells[i].id.split('cell',2)[1].split('-',2));
+                            canmove();
                         } else if (turn == 'white'){
                             boardLayout[row][column]=2;
                             move=[row,column];
                             captureTiles(move);
                             turn='black';
                             updateBoard();
-                            // canmove();
-                            // console.log(cells[i].id.split('cell',2)[1].split('-',2));
+                            canmove();
                         }
                     }
                 }
@@ -175,7 +173,6 @@ window.addEventListener('load', () => {
         resetValidMoves();
         createBoard();
         checkValidMoves();
-        // console.log(boardLayout);
         for (let row = 0; row < 8; row++) {
             for (let column = 0; column < 8; column++) {
                 const currentTile = boardLayout[row][column];
@@ -243,7 +240,7 @@ window.addEventListener('load', () => {
         if (move==false) {
             if (turn=='black') {
                 turn='white';
-                move=false;
+                updateBoard();
                 for (let row = 0; row < 8; row++) {
                     for (let column = 0; column < 8; column++) {
                         if (boardLayout[row][column] == 3) {
@@ -252,13 +249,12 @@ window.addEventListener('load', () => {
                     }
                 }
                 if (move==false) {
-                    console.log('game over');
                     gameFinish();
                 }
             }
             if (turn=='white') {
                 turn='black';
-                move=false;
+                updateBoard();
                 for (let row = 0; row < 8; row++) {
                     for (let column = 0; column < 8; column++) {
                         if (boardLayout[row][column] == 3) {
@@ -267,7 +263,6 @@ window.addEventListener('load', () => {
                     }
                 }
                 if (move==false) {
-                    console.log('game over');
                     gameFinish();
                 }
             }
@@ -360,21 +355,19 @@ window.addEventListener('load', () => {
     }
 
     function checkMove(move) {
-        // console.log(move);
         for (let i = 0; i < 8; i++) {
             if (turn=='black') {
                 if ( !(move[0]+directions[i][0] < 0) && !(move[0]+directions[i][0] > 7) && !(move[1]+directions[i][1] < 0) && !(move[0]+directions[i][0] > 7)) {
                     cellcheck=[move[0]+directions[i][0],move[1]+directions[i][1]];
                     if (boardLayout[cellcheck[0]][cellcheck[1]] == 2) {
-                        // console.log(move);
-                        checkDirection(directions[i],move);
+                        checkDirection(directions[i],cellcheck);
                     }
                 }
             }else if (turn=='white') {
                 if ( !(move[0]+directions[i][0] < 0) && !(move[0]+directions[i][0] > 7) && !(move[1]+directions[i][1] < 0) && !(move[0]+directions[i][0] > 7)) {
                     cellcheck=[move[0]+directions[i][0],move[1]+directions[i][1]];
                     if (boardLayout[cellcheck[0]][cellcheck[1]] == 1) {
-                        checkDirection(directions[i],move);
+                        checkDirection(directions[i],cellcheck);
                     }
                 }
             }
@@ -387,17 +380,14 @@ window.addEventListener('load', () => {
         rep=1;
         while (check==false) {
             if ( !(move[0]+(direction[0]*rep) < 0) && !(move[0]+(direction[0]*rep) > 7) && !(move[1]+(direction[1]*rep) < 0) && !(move[0]+(direction[1]*rep) > 7)) {
-                // console.log(move);
                 if (turn=='black') {
                     cellcheck=[move[0]+(direction[0]*rep),move[1]+(direction[1]*rep)];
                     if (boardLayout[cellcheck[0]][cellcheck[1]] == 1) {
                         found=true;
                         boardLayout[move[0]][move[1]]=1;
-                        for (let i = 0; i < rep; i++) {
+                        for (let i = 0; i <= rep; i++) {
                             cellcapture=[move[0]+(direction[0]*i),move[1]+(direction[1]*i)];
-                            console.log(cellcapture);
                             boardLayout[cellcapture[0]][cellcapture[1]]=1;
-                            console.log(boardLayout);
                         }
                         check=true;
                     }else if ((boardLayout[cellcheck[0]][cellcheck[1]] == 0)){
@@ -412,11 +402,9 @@ window.addEventListener('load', () => {
                     if (boardLayout[cellcheck[0]][cellcheck[1]] == 2) {
                         found=true;
                         boardLayout[move[0]][move[1]]=2;
-                        for (let i = 0; i < rep; i++) {
+                        for (let i = 0; i <= rep; i++) {
                             cellcapture=[move[0]+(direction[0]*i),move[1]+(direction[1]*i)];
-                            console.log(cellcapture);
                             boardLayout[cellcapture[0]][cellcapture[1]]=2;
-                            console.log(boardLayout);
                         }
                         check=true;
                     }else if ((boardLayout[cellcheck[0]][cellcheck[1]] == 0)){
