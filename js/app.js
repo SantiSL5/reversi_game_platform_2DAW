@@ -179,7 +179,7 @@ window.addEventListener('load', () => {
         for (let row = 0; row < 8; row++) {
             for (let column = 0; column < 8; column++) {
                 const currentTile = boardLayout[row][column];
-                if (currentTile == 3) {
+                if (currentTile == 3 && turn == 'black') {
                     document.getElementById('cell' + row + '-' + column).appendChild(createTile('validMove'));
                 }else if (currentTile == 1){
                     document.getElementById('cell' + row + '-' + column).appendChild(createTile('black'));
@@ -430,7 +430,7 @@ window.addEventListener('load', () => {
         checkMove(move);
     }
 
-    async function playIA() {
+    function playIA() {
         posibleplays=[];
         boardLayout.map((lines,index) => {
             lines.map((cell,childindex) => {
@@ -445,11 +445,12 @@ window.addEventListener('load', () => {
         column=play[1];
         boardLayout[row][column]=2;
         move=[row,column];
-        captureTiles(move);
-        turn='black';
-        updateBoard();
-        canmove();
-        return;
+        setTimeout(()=> {
+            captureTiles(move);
+            turn='black';
+            updateBoard();
+            canmove();
+        }, 1500)
     }
 
     setInterval(createLine, 750);
