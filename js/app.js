@@ -92,14 +92,17 @@ window.addEventListener('load', () => {
                             turn='white';
                             updateBoard();
                             canmove();
-                        } else if (turn == 'white'){
-                            boardLayout[row][column]=2;
-                            move=[row,column];
-                            captureTiles(move);
-                            turn='black';
-                            updateBoard();
-                            canmove();
-                        }
+                            playIA();
+                        } 
+                        // Multiplayer
+                        // else if (turn == 'white'){
+                        //     boardLayout[row][column]=2;
+                        //     move=[row,column];
+                        //     captureTiles(move);
+                        //     turn='black';
+                        //     updateBoard();
+                        //     canmove();
+                        // }
                     }
                 }
                 //     tile=cells[i].querySelector('.tile');
@@ -425,6 +428,28 @@ window.addEventListener('load', () => {
 
     function captureTiles(move) {
         checkMove(move);
+    }
+
+    async function playIA() {
+        posibleplays=[];
+        boardLayout.map((lines,index) => {
+            lines.map((cell,childindex) => {
+                if (cell == 3) {
+                    posibleplays[posibleplays.length]=[index,childindex];
+                }
+            })
+        })
+        indexplay=Math.floor(Math.random() * ((posibleplays.length -1) - 0 + 1) + 0);
+        play=posibleplays[indexplay];
+        row=play[0]
+        column=play[1];
+        boardLayout[row][column]=2;
+        move=[row,column];
+        captureTiles(move);
+        turn='black';
+        updateBoard();
+        canmove();
+        return;
     }
 
     setInterval(createLine, 750);
