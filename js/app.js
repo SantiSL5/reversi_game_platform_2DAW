@@ -1,4 +1,6 @@
 window.addEventListener('load', () => {
+
+    // Initial board state, 1 being black and 2 being white
     var boardLayout = [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
@@ -9,6 +11,8 @@ window.addEventListener('load', () => {
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0]
     ]
+
+    // Background colors
     const colors = [
         '#2196f3',
         '#e91e63',
@@ -16,6 +20,7 @@ window.addEventListener('load', () => {
         '#74ff1d'
     ]
 
+    // Directions to look for when capturing tiles
     const directions = [
         [0,1],
         [1,1],
@@ -28,7 +33,6 @@ window.addEventListener('load', () => {
     ]
 
     var tilesCaptured = [];
-
     const board = document.getElementById('board');
     const playerScore = document.getElementById('playerScore');
     const AIScore = document.getElementById('AIScore');
@@ -36,9 +40,9 @@ window.addEventListener('load', () => {
     const helpIcon = document.getElementById('helpIcon');
     const rules = document.getElementById('rules');
     const gotIt = document.getElementById('gotIt');
-    const prefixes = ['-o-', '-ms-', '-moz-', '-webkit-'];
     let turn='black';
 
+    // Creates background lines
     function createLine() {
         const backgroundSection = document.getElementById('background');
         const backgroundLine = document.createElement('div');
@@ -98,6 +102,7 @@ window.addEventListener('load', () => {
         }, 1300);
     });
 
+    // When a game is over, the announcer will ask to play again after showing the match result. Clicking it will reset everything to start again.
     announcer.addEventListener('click', () => {
         if (announcer.classList.contains('playAgain')) {
             announcer.classList.remove('playAgain');
@@ -120,7 +125,6 @@ window.addEventListener('load', () => {
     function createBoard() {
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
-                
                 cell = document.createElement("div");
                 cell.setAttribute("id", "cell" + i + "-" + j);
                 cell.setAttribute("class", "cell");
@@ -129,6 +133,8 @@ window.addEventListener('load', () => {
             
         }
         cells=document.getElementsByClassName('cell');
+
+        // Click event for player/s on valid cells
         for (let i = 0; i < cells.length; i++) {
             cells[i].addEventListener('click', () => {
                 if (!cells[i].querySelector(".tile validMove")) {
@@ -258,6 +264,7 @@ window.addEventListener('load', () => {
 
     }
 
+    // Reset the moves that were valid before to 0 to replace them with the new ones 
     function resetValidMoves() {
         for (let row = 0; row < 8; row++) {
             for (let column = 0; column < 8; column++) {
@@ -268,9 +275,11 @@ window.addEventListener('load', () => {
         }
     }
 
-    function canmove() {
+    // Checks if player or AI can do a move, if no one can, the game ends
+    function canmove() { 
         move=false;
         finish=true;
+        // Check if there are valid moves on the board for the player or the AI
         for (let row = 0; row < 8; row++) {
             for (let column = 0; column < 8; column++) {
                 if (boardLayout[row][column] == 3) {
@@ -278,6 +287,8 @@ window.addEventListener('load', () => {
                 }
             }
         }
+
+        // Checks if there are no more spaces to place tiles on
         for (let row = 0; row < 8; row++) {
             for (let column = 0; column < 8; column++) {
                 if (boardLayout[row][column] == 0 || boardLayout[row][column] == 3) {
@@ -294,6 +305,7 @@ window.addEventListener('load', () => {
 
         setTimeout(()=> {
             if (move==false && finish==false) {
+                // If a player can't move, the turn will be passed automatically
                 if (turn=='black') {
                     turn='white';
                     updateBoard();
@@ -327,6 +339,7 @@ window.addEventListener('load', () => {
         }, 500)
     }
 
+    // Looks for places where there are no tiles
     function checkValidMoves() {
         for (let row = 0; row < 8; row++) {
             for (let column = 0; column < 8; column++) {
@@ -340,6 +353,7 @@ window.addEventListener('load', () => {
         }
     }
 
+    // Checks if there are rival tiles next to each empty cell
     function checkMoves(move) {
         for (let i = 0; i < 8; i++) {
             result=false;
@@ -368,11 +382,13 @@ window.addEventListener('load', () => {
         return result;
     }
 
+    // Makes sure a move and direction are valid
     function checkDirections(direction,move) {
         let check=false;
         let found=false;
         rep=1;
         while (check==false) {
+            // Avoids the direction check to go outside the board
             if ( !((move[0]+(direction[0]*rep)) < 0) && !((move[0]+(direction[0]*rep)) > 7) && !((move[1]+(direction[1]*rep)) < 0) && !((move[1]+(direction[1]*rep)) > 7)) {
                 if (turn=='black') {
                     cellcheck=[move[0]+(direction[0]*rep),move[1]+(direction[1]*rep)];
@@ -411,6 +427,11 @@ window.addEventListener('load', () => {
         return found;
     }
 
+    function captureTiles(move) {
+        checkMove(move);
+    }
+
+    // Gets the direction where rival tiles might be captured by the placed tile
     function checkMove(move) {
         for (let i = 0; i < 8; i++) {
             if (turn=='black') {
@@ -431,11 +452,13 @@ window.addEventListener('load', () => {
         }
     }
 
+    // Looks through all the directions that a tile might capture, checks if it can actually capture in that direction and captures those tiles
     function checkDirection(direction,move) {
         check=false;
         found=false;
         rep=1;
         while (check==false) {
+            // Avoids the direction check to go outside the board
             if ( !((move[0]+(direction[0]*rep)) < 0) && !((move[0]+(direction[0]*rep)) > 7) && !((move[1]+(direction[1]*rep)) < 0) && !((move[1]+(direction[1]*rep)) > 7)) {                
                 if (turn=='black') {
                     cellcheck=[move[0]+(direction[0]*rep),move[1]+(direction[1]*rep)];
@@ -484,10 +507,6 @@ window.addEventListener('load', () => {
         }
     }
 
-    function captureTiles(move) {
-        checkMove(move);
-    }
-
     function playIA() {
         posibleplays=[];
         boardLayout.map((lines,index) => {
@@ -511,9 +530,9 @@ window.addEventListener('load', () => {
         }, 1500)
     }
 
+    // Send score to server
     function send_score(variableScore) {
         var token = localStorage.getItem("token");
-        console.log(variableScore);
         if (token) {
             var http = new XMLHttpRequest();
             var url = 'http://0.0.0.0:4000/api/rank/update';
@@ -536,6 +555,7 @@ window.addEventListener('load', () => {
         }
     }
 
+    // Tile rotation animation
     function rotateTile(tile) {
         if (document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.contains('black')) {
             document.getElementById('cell'+tile[0]+"-"+tile[1]).childNodes[0].classList.remove('black');
