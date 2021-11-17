@@ -3,7 +3,7 @@ window.addEventListener('load', () => {
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 2, 1, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0, 0, 0],
         [0, 0, 0, 1, 2, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
@@ -306,6 +306,8 @@ window.addEventListener('load', () => {
                     }
                     if (move==true) {
                         playIA();
+                    }else if (move==false) {
+                        gameFinish()
                     }
                 }else if (turn=='white') {
                     turn='black';
@@ -317,9 +319,12 @@ window.addEventListener('load', () => {
                             }
                         }
                     }
+                    if (move==false) {
+                        gameFinish()
+                    }
                 }
             }
-        }, 1000)
+        }, 500)
     }
 
     function checkValidMoves() {
