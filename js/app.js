@@ -241,11 +241,11 @@ window.addEventListener('load', () => {
         if (finalPlayerScore > finalAIScore) {
             announcer.innerHTML = "YOU WIN";
             scoreToSend = finalPlayerScore*10;
-        } else if (finalPlayerScore > finalAIScore) {
-            announcer.innerHTML = "TIE";
-        } else {
+        } else if (finalAIScore > finalPlayerScore) {
             announcer.innerHTML = "AI WINS";
             scoreToSend = -(finalAIScore*6);
+        } else {
+            announcer.innerHTML = "TIE";
         }
 
         announcer.style.visibility = "visible";
