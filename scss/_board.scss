@@ -78,6 +78,7 @@ $darkgreen: darken($green, 20%);
 
 .validMove:hover {
     background-color: #eeeeeebb;
+    cursor: pointer;
 }
 
 .scoreboardContainer {
@@ -203,6 +204,7 @@ $darkgreen: darken($green, 20%);
 
     #gotIt:hover {
         border: 0.4vh solid #fff;
+        cursor: pointer;
     }
 }
 
@@ -216,6 +218,11 @@ $darkgreen: darken($green, 20%);
 
 .showRules {
     animation: showRulesAnimation 1.3s ease-out forwards;
+}
+
+.playAgain:hover {
+    cursor: pointer;
+    border: 0.4vh solid #fff;
 }
 
 @for $i from 0 through 7 {

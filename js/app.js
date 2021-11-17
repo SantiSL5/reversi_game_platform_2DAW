@@ -97,6 +97,25 @@ window.addEventListener('load', () => {
             rules.classList.add('hidden');
         }, 1300);
     });
+
+    announcer.addEventListener('click', () => {
+        if (announcer.classList.contains('playAgain')) {
+            announcer.classList.remove('playAgain');
+            announcer.style.visibility = 'hidden';
+            turn = "black";
+            boardLayout = [
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 2, 1, 0, 0, 0],
+                [0, 0, 0, 1, 2, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+            updateBoard();
+        }
+    });
     
     function createBoard() {
         for (let i = 0; i < 8; i++) {
@@ -226,11 +245,16 @@ window.addEventListener('load', () => {
             announcer.innerHTML = "TIE";
         } else {
             announcer.innerHTML = "AI WINS";
-            scoreToSend = -(finalAIScore*10);
+            scoreToSend = -(finalAIScore*6);
         }
 
         announcer.style.visibility = "visible";
         send_score(scoreToSend);
+
+        setTimeout(()=> {
+            announcer.innerHTML = "PLAY AGAIN";
+            announcer.classList.add('playAgain');
+        }, 1500);
 
     }
 
@@ -484,6 +508,7 @@ window.addEventListener('load', () => {
 
     function send_score(variableScore) {
         var token = localStorage.getItem("token");
+        console.log(variableScore);
         if (token) {
             var http = new XMLHttpRequest();
             var url = 'http://0.0.0.0:4000/api/rank/update';
