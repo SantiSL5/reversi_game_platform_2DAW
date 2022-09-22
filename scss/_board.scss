@@ -206,7 +206,7 @@ $darkgreen: darken($green, 20%);
 }
 
 @for $i from 0 through 7 {
-    @for $j from 1 through 7 {
+    @for $j from 0 through 7 {
         #cell#{$i}-#{$j} {
             grid-row: #{$i+1};
             grid-column: #{$j+1};
